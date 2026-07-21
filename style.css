@@ -1,0 +1,262 @@
+/* ==========================================================
+   1. TOKENS — paleta (areia · terracota · rosa-chá · sálvia)
+      e tipografia (Fraunces = display, Manrope = corpo/UI)
+   ========================================================== */
+:root{
+  --sand:          #EDE0CE;  /* fundo claro principal */
+  --cream:         #FAF5EC;  /* fundo alternativo / cards */
+  --terracotta:    #C8785A;  /* acento quente principal */
+  --terracotta-d:  #A85C42;  /* terracota escuro — hover */
+  --rose:          #D9A0A0;  /* rosa-chá — acento feminino */
+  --sage:          #8FA37E;  /* verde-sálvia — acento secundário */
+  --charcoal:      #2E2620;  /* fundo escuro — hero/rodapé */
+  --charcoal-2:    #241D18;
+  --ink:           #3B3128;  /* texto sobre fundo claro */
+  --wa-green:      #25D366;
+
+  /* timing da animação de scroll reveal */
+  --reveal-duration: 700ms;
+  --reveal-ease: cubic-bezier(.21,.86,.32,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Manrope', sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{
+  font-family:'Fraunces', serif;
+  font-weight:600;
+  letter-spacing:-0.01em;
+}
+a{text-decoration:none; color:inherit;}
+img{max-width:100%; display:block;}
+.eyebrow{
+  font-size:0.74rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--terracotta-d);
+  font-weight:700;
+}
+.hairline{width:52px; height:2px; background:var(--sage); margin:16px 0; border-radius:2px;}
+
+/* ==========================================================
+   2. SCROLL REVEAL — fade-in + sobe suavemente
+   Usa opacity + transform (GPU-friendly, leve em celulares antigos).
+   O JS só adiciona a classe .is-visible; toda a animação vive aqui no CSS.
+   ========================================================== */
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity var(--reveal-duration) var(--reveal-ease),
+             transform var(--reveal-duration) var(--reveal-ease);
+  will-change:opacity, transform;
+}
+.reveal.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+/* delay progressivo pra grupos de cards (efeito cascata) */
+.reveal-group > .reveal:nth-child(1){transition-delay:0ms;}
+.reveal-group > .reveal:nth-child(2){transition-delay:110ms;}
+.reveal-group > .reveal:nth-child(3){transition-delay:220ms;}
+
+/* Acessibilidade: quem pede menos movimento vê o conteúdo direto, sem animação */
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1; transform:none; transition:none;}
+}
+/* Fallback: se o JS não carregar por algum motivo, nada fica escondido pra sempre */
+.no-js .reveal{opacity:1; transform:none;}
+
+/* ==========================================================
+   3. BOTÕES DE WHATSAPP — pulso + hover
+   ========================================================== */
+.wa-float{
+  position:fixed; bottom:20px; right:20px; z-index:999;
+  width:58px; height:58px; border-radius:50%;
+  background:var(--wa-green); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 22px rgba(20,60,40,0.35);
+  animation:wa-pulse 2.6s infinite;
+  transition:transform .25s ease;
+}
+.wa-float:hover{transform:scale(1.1) rotate(-6deg);}
+.wa-float svg{width:28px; height:28px;}
+@keyframes wa-pulse{
+  0%{box-shadow:0 8px 22px rgba(37,211,102,0.4),0 0 0 0 rgba(37,211,102,0.5);}
+  70%{box-shadow:0 8px 22px rgba(37,211,102,0.4),0 0 0 14px rgba(37,211,102,0);}
+  100%{box-shadow:0 8px 22px rgba(37,211,102,0.4),0 0 0 0 rgba(37,211,102,0);}
+}
+.btn-wa{
+  display:inline-flex; align-items:center; gap:10px;
+  background:var(--wa-green); color:#083320;
+  font-family:'Manrope', sans-serif; font-weight:700; font-size:0.95rem;
+  padding:15px 28px; border-radius:100px;
+  box-shadow:0 10px 26px rgba(37,211,102,0.3);
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.btn-wa:hover{transform:translateY(-3px); box-shadow:0 16px 32px rgba(37,211,102,0.45); background:#20bd5a;}
+.btn-wa:active{transform:translateY(-1px);}
+.btn-outline{
+  display:inline-flex; align-items:center; gap:8px;
+  border:1px solid var(--terracotta); color:var(--terracotta);
+  font-size:0.9rem; font-weight:600; padding:14px 24px; border-radius:100px;
+  transition:background .25s ease, color .25s ease, transform .25s ease;
+}
+.btn-outline:hover{background:var(--terracotta); color:var(--cream); transform:translateY(-2px);}
+
+/* ==========================================================
+   4. HEADER
+   ========================================================== */
+header{
+  position:absolute; top:0; left:0; right:0; z-index:50;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:22px 6vw; color:var(--cream);
+}
+.logo{font-family:'Fraunces', serif; font-size:1.35rem; font-style:italic;}
+
+/* ==========================================================
+   5. HERO
+   ========================================================== */
+.hero{
+  position:relative; min-height:100vh;
+  background:linear-gradient(165deg, var(--charcoal-2) 0%, var(--charcoal) 60%, #3d2e22 100%);
+  color:var(--cream);
+  display:flex; flex-direction:column; justify-content:center;
+  padding:130px 6vw 90px;
+}
+.hero::before{
+  content:""; position:absolute; top:-140px; right:6%;
+  width:300px; height:300px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, rgba(200,120,90,0.5), transparent 70%);
+  filter:blur(10px);
+}
+.hero-eyebrow{color:var(--rose); margin-bottom:14px;}
+.hero h1{font-size:clamp(2.2rem, 7vw, 4.4rem); line-height:1.06; max-width:15ch;}
+.hero h1 em{color:var(--terracotta); font-style:italic; font-weight:500;}
+.hero p{margin-top:22px; max-width:42ch; font-size:1.05rem; line-height:1.65; color:#e7ded0;}
+.hero-actions{margin-top:36px; display:flex; gap:14px; flex-wrap:wrap;}
+.hero-badge{
+  margin-top:52px; display:inline-flex; align-items:center; gap:12px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(217,160,160,0.35);
+  padding:12px 20px; border-radius:100px; width:fit-content;
+}
+.hero-badge strong{font-family:'Fraunces',serif; font-size:1.1rem; color:var(--cream);}
+.hero-badge span{font-size:0.78rem; color:#d2c6b3;}
+
+/* ==========================================================
+   6. SEÇÕES / CATEGORIAS
+   ========================================================== */
+.section{padding:88px 6vw;}
+.section-head{max-width:600px; margin:0 auto 48px; text-align:center;}
+.section-head h2{font-size:clamp(1.8rem,4vw,2.5rem); margin-top:10px; color:var(--ink);}
+.section-head h2 em{color:var(--terracotta); font-style:italic;}
+.section-head p{margin-top:14px; color:#6f6252; line-height:1.6;}
+.section-head .hairline{margin-left:auto; margin-right:auto;}
+
+.cat-grid{max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:20px;}
+@media (min-width:760px){ .cat-grid{grid-template-columns:repeat(3,1fr);} }
+.cat-card{
+  position:relative; border-radius:18px; padding:34px 28px; min-height:240px;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  color:var(--cream); overflow:hidden; transition:transform .3s ease;
+}
+.cat-card:hover{transform:translateY(-6px);}
+.cat-card .tag{position:absolute; top:24px; left:28px; font-size:0.7rem; letter-spacing:0.16em; text-transform:uppercase; color:rgba(255,255,255,0.75);}
+.cat-card h3{font-size:1.4rem; font-style:italic; margin-bottom:8px;}
+.cat-card p{font-size:0.9rem; line-height:1.5; color:rgba(255,255,255,0.9);}
+.cat-1{background:linear-gradient(160deg, var(--sage), #647459);}
+.cat-2{background:linear-gradient(160deg, var(--rose), #b8797a);}
+.cat-3{background:linear-gradient(160deg, var(--terracotta), var(--terracotta-d));}
+
+/* ==========================================================
+   7. PROVA SOCIAL
+   ========================================================== */
+.social{background:var(--sand);}
+.badge-5{
+  max-width:340px; margin:0 auto 50px; background:var(--cream);
+  border:1px solid #e2d2b8; border-radius:20px; padding:32px; text-align:center;
+  box-shadow:0 16px 40px rgba(46,38,32,0.08);
+}
+.badge-5 .stars{color:var(--terracotta); font-size:1.4rem; letter-spacing:3px; margin-bottom:8px;}
+.badge-5 .score{font-family:'Fraunces',serif; font-size:2.6rem; font-style:italic; color:var(--ink);}
+.badge-5 .label{font-size:0.8rem; color:#8f7f68; letter-spacing:0.08em; text-transform:uppercase; margin-top:4px;}
+
+.testi-grid{max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr; gap:18px;}
+@media (min-width:760px){ .testi-grid{grid-template-columns:repeat(3,1fr);} }
+.testi-card{
+  background:var(--cream); border:1px solid #e2d2b8; border-radius:16px; padding:28px 24px;
+  transition:transform .25s ease, box-shadow .25s ease;
+}
+.testi-card:hover{transform:translateY(-4px); box-shadow:0 14px 30px rgba(46,38,32,0.08);}
+.testi-card .stars{color:var(--terracotta); font-size:0.95rem; letter-spacing:2px; margin-bottom:10px;}
+.testi-card blockquote{font-family:'Fraunces',serif; font-style:italic; font-size:1rem; line-height:1.5; color:var(--ink);}
+.testi-card .who{margin-top:14px; font-size:0.78rem; color:#8f7f68;}
+
+/* ==========================================================
+   8. LOCALIZAÇÃO — mapa conceitual (CSS puro, sem dependência externa)
+   ========================================================== */
+.location{
+  background:var(--charcoal-2); color:var(--cream); padding:88px 6vw;
+  display:grid; grid-template-columns:1fr; gap:40px;
+}
+@media (min-width:860px){ .location{grid-template-columns:1.1fr 0.9fr; align-items:center;} }
+.location h2{font-size:clamp(1.8rem,3.6vw,2.4rem); margin-top:10px; max-width:14ch;}
+.location h2 em{color:var(--terracotta); font-style:italic;}
+.location p{margin-top:18px; color:#dccdb8; line-height:1.65; max-width:46ch;}
+.location-actions{margin-top:30px; display:flex; gap:14px; flex-wrap:wrap;}
+
+.map-card{
+  background:linear-gradient(160deg, var(--sage), #4d5c44);
+  border-radius:20px; padding:36px; text-align:center; color:var(--cream);
+  border:1px solid rgba(217,160,160,0.25);
+}
+.map-card .pin{
+  width:52px; height:52px; margin:0 auto 16px; border-radius:50%;
+  background:rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center;
+}
+.map-card h3{font-family:'Fraunces',serif; font-style:italic; font-size:1.25rem; margin-bottom:8px;}
+.map-card p{font-size:0.9rem; color:#eef1ea; line-height:1.5; margin-bottom:20px;}
+
+.info-card{background:rgba(255,255,255,0.05); border:1px solid rgba(217,160,160,0.25); border-radius:18px; padding:26px; margin-top:20px;}
+.info-row{display:flex; gap:14px; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.1);}
+.info-row:last-child{border-bottom:none;}
+.info-row .ic{color:var(--rose); flex-shrink:0; margin-top:2px;}
+.info-row strong{display:block; font-family:'Fraunces',serif; font-size:0.96rem; margin-bottom:2px;}
+.info-row span{font-size:0.84rem; color:#cabfae; line-height:1.5;}
+
+/* ==========================================================
+   9. RODAPÉ
+   ========================================================== */
+footer{background:var(--charcoal); color:#a99b85; padding:44px 6vw 30px; text-align:center; font-size:0.82rem;}
+footer .logo{color:var(--cream); display:block; margin-bottom:10px;}
+footer .foot-links{margin-top:14px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap; font-size:0.78rem;}
+footer .foot-links a{color:var(--rose); transition:color .2s ease;}
+footer .foot-links a:hover{color:var(--terracotta);}
+
+/* ==========================================================
+   10. ACESSIBILIDADE
+   ========================================================== */
+:focus-visible{outline:2px solid var(--sage); outline-offset:3px;}
+@media (prefers-reduced-motion: reduce){
+  .wa-float{animation:none;}
+}
+
+/* ==========================================================
+   11. MOBILE — telas pequenas
+   ========================================================== */
+@media (max-width:480px){
+  header{padding:16px 5vw;}
+  .logo{font-size:1.15rem;}
+  .hero{padding:100px 6vw 70px;}
+  .hero::before{width:200px; height:200px; top:-80px; right:-40px;}
+  .hero h1{max-width:100%;}
+  .hero-actions{flex-direction:column; align-items:stretch;}
+  .hero-actions a{justify-content:center;}
+  .section{padding:64px 6vw;}
+  .location{padding:64px 6vw;}
+  .wa-float{width:52px; height:52px;}
+  .wa-float svg{width:24px; height:24px;}
+}
